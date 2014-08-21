@@ -1,6 +1,51 @@
 package dynamiccon
 
-import "testing"
+import ("testing"; "os"; "strings"; "bufio"; "strconv")
+
+func fileReader () (total int, pairs []Pair)  {
+	f, _ := os.Open("test.input")
+	bf := bufio.NewReader(f)
+	defer f.Close()
+	str, ok := bf.ReadString('\n')
+	str = strings.Trim(str, "\n")
+	if ok != nil { return }
+	str_slice := strings.Split(str, " ")
+	if len(str_slice) != 1 {
+		return
+	} else {
+		atmost, ok := strconv.Atoi(str_slice[0])
+		if ok != nil {
+			return
+		}
+		total = atmost
+		pairs = make([]Pair, 0, total)
+	}
+	counter := 0
+	for counter < total {
+		str, ok = bf.ReadString('\n')
+		str = strings.Trim(str, "\n")
+		if ok != nil { 
+			break 
+		}
+		str_slice := strings.Split(str, " ")
+		first, _ := strconv.Atoi(str_slice[0])
+		second, _ := strconv.Atoi(str_slice[1])
+		pair := Pair{first, second}
+		pairs = append(pairs, pair)
+		counter += 1
+	}
+	return
+}
+
+func TestFileClient(t *testing.T) {
+	_, pairs := fileReader()
+	for _, pair := range pairs {
+		unionPair(pair)
+		if !connectedPair(pair) {
+			t.Errorf("%d and %d should be connected", pair.first, pair.second)
+		}
+	}
+}
 
 func laterTestOps(t *testing.T) {
 	union(4, 3)
@@ -23,7 +68,7 @@ func laterTestOps(t *testing.T) {
 	}
 }
 
-func TestUFInit(t *testing.T) {
+func laterTestUFInit(t *testing.T) {
 	uf := UnionFind{make([]int, 100)}
 	var uf2 UnionFind
 	uf2.objs = make([]int, 200)

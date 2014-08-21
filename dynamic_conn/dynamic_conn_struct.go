@@ -1,5 +1,10 @@
 package dynamiccon
 
+type Pair struct{
+	first int
+	second int
+}
+
 type UnionFind struct {
 	objs []int
 }
