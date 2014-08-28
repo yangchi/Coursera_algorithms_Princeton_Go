@@ -9,15 +9,12 @@ type UnionFind struct {
 	objs []int
 }
 
-func (ufp *UnionFind) initUF (size int) {
-	ufp.objs = make([]int, size)
-}
-
-/*
 type UnionFinder interface {
 	initUF(int)
+	unionPair(Pair)
 	union(int, int)
-	connected(int, int)
+	connectedPair(Pair) (bool)
+	connected(int, int) (bool)
+	print()
 }
-*/
 

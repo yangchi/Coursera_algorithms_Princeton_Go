@@ -1,17 +1,42 @@
 package dynamiccon
 
-func unionPair (pair Pair)  {
-	return
+import "fmt"
+
+type QuickFind UnionFind
+
+
+func (ufp *QuickFind) initUF (size int) {
+	ufp.objs = make([]int, size)
+	for index, _ := range ufp.objs {
+		ufp.objs[index] = index
+	}
 }
 
-func union (first, second int) {
-	return
+func (ufp *QuickFind) unionPair (pair Pair) {
+	ufp.union(pair.first, pair.second)
 }
 
-func connected (first, second int) (bool) {
-	return false
+func (ufp *QuickFind) union (first, second int) {
+	pid := ufp.objs[first]
+	qid := ufp.objs[second]
+	for index, obj := range ufp.objs {
+		if obj == pid {
+			ufp.objs[index] = qid
+		}
+	}
 }
 
-func connectedPair (pair Pair) (bool) {
-	return false
+func (ufp *QuickFind) connected (first, second int) (bool) {
+	return ufp.objs[first] == ufp.objs[second]
+}
+
+func (ufp *QuickFind) connectedPair (pair Pair) (bool) {
+	return ufp.objs[pair.first] == ufp.objs[pair.second]
+}
+
+func (ufp *QuickFind) print () () {
+	for _, obj := range ufp.objs {
+		fmt.Printf("%d  ", obj)
+	}
+	fmt.Println()
 }
