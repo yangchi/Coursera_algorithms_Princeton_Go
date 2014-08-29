@@ -20,9 +20,10 @@ type UnionFinder interface {
 	print()
 }
 
-func genericInitUF (objects []int, size int) {
-	for index, _ := range objects{
-		objects[index] = index
+func genericInitUF (objects *[]int, size int) {
+	*objects = make([]int, size)
+	for index, _ := range *objects{
+		(*objects)[index] = index
 	}
 }
 

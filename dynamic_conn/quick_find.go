@@ -5,8 +5,7 @@ type QuickFind UnionFind
 
 
 func (ufp *QuickFind) initUF (size int) {
-	ufp.objs = make([]int, size)
-	genericInitUF(ufp.objs, size)
+	genericInitUF(&ufp.objs, size)
 }
 
 func (ufp *QuickFind) unionPair (pair Pair) {

@@ -3,8 +3,7 @@ package dynamiccon
 type QuickUnion UnionFind
 
 func (ufp *QuickUnion) initUF (size int) {
-	ufp.objs = make([]int, size)
-	genericInitUF(ufp.objs, size)
+	genericInitUF(&ufp.objs, size)
 }
 
 func (ufp *QuickUnion) root (index int) (root int) {
