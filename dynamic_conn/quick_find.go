@@ -1,15 +1,12 @@
 package dynamiccon
 
-import "fmt"
 
 type QuickFind UnionFind
 
 
 func (ufp *QuickFind) initUF (size int) {
 	ufp.objs = make([]int, size)
-	for index, _ := range ufp.objs {
-		ufp.objs[index] = index
-	}
+	genericInitUF(ufp.objs, size)
 }
 
 func (ufp *QuickFind) unionPair (pair Pair) {
@@ -35,8 +32,5 @@ func (ufp *QuickFind) connectedPair (pair Pair) (bool) {
 }
 
 func (ufp *QuickFind) print () () {
-	for _, obj := range ufp.objs {
-		fmt.Printf("%d  ", obj)
-	}
-	fmt.Println()
+	genericPrint(ufp.objs)
 }

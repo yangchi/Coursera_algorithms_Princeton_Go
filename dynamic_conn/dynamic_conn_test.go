@@ -1,6 +1,6 @@
 package dynamiccon
 
-import ("testing"; "os"; "strings"; "bufio"; "strconv";)
+import ("testing"; "os"; "strings"; "bufio"; "strconv"; "fmt")
 
 func fileReader () (total int, pairs []Pair)  {
 	f, _ := os.Open("test.input")
@@ -52,10 +52,7 @@ func TestFileClientQuickFind(t *testing.T) {
 	}
 }
 
-func TestQuickFind(t *testing.T) {
-	var finder UnionFinder
-	var quickFinder QuickFind
-	finder = &quickFinder
+func genericUnionFindTest (finder UnionFinder) (bool, string){
 	finder.initUF(10)
 	finder.print()
 	finder.union(4, 3)
@@ -67,17 +64,39 @@ func TestQuickFind(t *testing.T) {
 	finder.print()
 	finder.union(2, 1)
 	finder.print()
+	fmt.Println()
 	if finder.connected(0, 7) {
-		t.Error("0 and 7 should not be connected")
+		return false, "0 and 7 should not be connected"
 	}
 	if !finder.connected(8, 9) {
-		t.Error("8 and 9 should be connected")
+		return false, "8 and 9 should be connected"
 	}
 	finder.union(0, 5)
 	finder.union(7, 2)
 	finder.union(6, 1)
 	finder.union(1, 0)
 	if !finder.connected(0, 7) {
-		t.Error("0 and 7 should be connected")
+		return false, "0 and 7 should be connected"
+	}
+	return true, ""
+}
+
+func TestQuickUnion(t *testing.T) {
+	var finder UnionFinder
+	var quickUnion QuickUnion
+	finder = &quickUnion
+	res, msg := genericUnionFindTest(finder)
+	if !res {
+		t.Error(msg)
+	}
+}
+
+func TestQuickFind(t *testing.T) {
+	var finder UnionFinder
+	var quickFinder QuickFind
+	finder = &quickFinder
+	res, msg := genericUnionFindTest(finder)
+	if !res {
+		t.Error(msg)
 	}
 }
