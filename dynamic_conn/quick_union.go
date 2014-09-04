@@ -19,6 +19,7 @@ func (ufp *QuickUnion) pathCompressionRoot (index int) (root int) {
 		ufp.objs[root] = ufp.objs[ufp.objs[root]]
 		root = ufp.objs[root]
 	}
+	return
 }
 
 func (ufp *QuickUnion) root (index int) (root int) {
@@ -54,6 +55,27 @@ func (ufp *QuickUnion) print () {
 func (ufp *QuickUnion) weightedUnion (first, second int) {
 	first_root := ufp.root(first)
 	second_root := ufp.root(second)
+	if first_root == second_root {
+		return
+	}
+	if ufp.sizes[first_root] < ufp.sizes[second_root] {
+		ufp.objs[first_root] = second_root
+		ufp.sizes[second_root] += ufp.sizes[first_root]
+	} else {
+		ufp.objs[second_root] = first_root
+		ufp.sizes[first_root] += ufp.sizes[second_root]
+	}
+}
+
+func (ufp *QuickUnion) compressedConnected (first, second int) bool {
+	firstRoot := ufp.pathCompressionRoot(first)
+	secondRoot := ufp.pathCompressionRoot(second)
+	return firstRoot == secondRoot
+}
+
+func (ufp *QuickUnion) weightedCompressedUnion (first, second int) {
+	first_root := ufp.pathCompressionRoot(first)
+	second_root := ufp.pathCompressionRoot(second)
 	if first_root == second_root {
 		return
 	}

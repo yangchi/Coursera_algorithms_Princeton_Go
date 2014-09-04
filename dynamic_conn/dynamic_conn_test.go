@@ -3,6 +3,7 @@ package dynamiccon
 import ("testing"; "os"; "strings"; "bufio"; "strconv")
 
 type unionFunc func (first, second int) ()
+type connectFunc func (first, second int) (bool)
 
 func fileReader () (total int, pairs []Pair)  {
 	f, _ := os.Open("test.input")
@@ -54,23 +55,25 @@ func TestFileClientQuickFind(t *testing.T) {
 	}
 }
 
-func moreGenericUnionFindTest (finder QuickUnion, unioner unionFunc) (bool, string){
+func moreGenericUnionFindTest (finder QuickUnion, 
+							   unioner unionFunc, 
+							   connecter connectFunc) (bool, string){
 	unioner(4, 3)
 	unioner(3, 8)
 	unioner(6, 5)
 	unioner(9, 4)
 	unioner(2, 1)
-	if finder.connected(0, 7) {
+	if connecter(0, 7) {
 		return false, "0 and 7 should not be connected"
 	}
-	if !finder.connected(8, 9) {
+	if !connecter(8, 9) {
 		return false, "8 and 9 should be connected"
 	}
 	unioner(0, 5)
 	unioner(7, 2)
 	unioner(6, 1)
 	unioner(1, 0)
-	if !finder.connected(0, 7) {
+	if !connecter(0, 7) {
 		return false, "0 and 7 should be connected"
 	}
 	return true, ""
@@ -124,7 +127,7 @@ func BenchmarkQuickUnion(b *testing.B) {
 	var quickUnion QuickUnion
 	for i := 0; i < b.N; i++ {
 		quickUnion.initUF(10)
-		moreGenericUnionFindTest(quickUnion, quickUnion.union)
+		moreGenericUnionFindTest(quickUnion, quickUnion.union, quickUnion.connected)
 	}
 }
 
@@ -132,7 +135,19 @@ func BenchmarkQuickUnionWeighted(b *testing.B) {
 	var quickUnion QuickUnion
 	for i := 0; i < b.N; i++ {
 		quickUnion.initUF(10)
-		moreGenericUnionFindTest(quickUnion, quickUnion.weightedUnion)
+		moreGenericUnionFindTest(quickUnion,
+								 quickUnion.weightedUnion, 
+								 quickUnion.connected)
+	}
+}
+
+func BenchmarkQuickUnionWeighterCompressed(b *testing.B) {
+	var quickUnion QuickUnion
+	for i := 0; i < b.N; i++ {
+		quickUnion.initUF(10)
+		moreGenericUnionFindTest(quickUnion, 
+								 quickUnion.weightedCompressedUnion, 
+								 quickUnion.compressedConnected)
 	}
 }
 
