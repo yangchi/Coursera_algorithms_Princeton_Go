@@ -1,6 +1,6 @@
 package dynamiccon
 
-import ("testing"; "os"; "strings"; "bufio"; "strconv"; "fmt")
+import ("testing"; "os"; "strings"; "bufio"; "strconv")
 
 func fileReader () (total int, pairs []Pair)  {
 	f, _ := os.Open("test.input")
@@ -54,17 +54,11 @@ func TestFileClientQuickFind(t *testing.T) {
 
 func genericUnionFindTest (finder UnionFinder) (bool, string){
 	finder.initUF(10)
-	finder.print()
 	finder.union(4, 3)
-	finder.print()
 	finder.union(3, 8)
-	finder.print()
 	finder.union(6, 5)
 	finder.union(9, 4)
-	finder.print()
 	finder.union(2, 1)
-	finder.print()
-	fmt.Println()
 	if finder.connected(0, 7) {
 		return false, "0 and 7 should not be connected"
 	}
@@ -100,3 +94,22 @@ func TestQuickFind(t *testing.T) {
 		t.Error(msg)
 	}
 }
+
+func BenchmarkQuickUnion(b *testing.B) {
+	var finder UnionFinder
+	var quickUnion QuickUnion
+	finder = &quickUnion
+	for i := 0; i < b.N; i++ {
+		genericUnionFindTest(finder)
+	}
+}
+
+func BenchmarkQuickFind(b *testing.B) {
+	var finder UnionFinder
+	var quickFinder QuickFind
+	finder = &quickFinder
+	for i := 0; i < b.N; i++ {
+		genericUnionFindTest(finder)
+	}
+}
+
