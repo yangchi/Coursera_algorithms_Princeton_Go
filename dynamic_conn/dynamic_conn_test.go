@@ -2,6 +2,8 @@ package dynamiccon
 
 import ("testing"; "os"; "strings"; "bufio"; "strconv")
 
+type unionFunc func (first, second int) ()
+
 func fileReader () (total int, pairs []Pair)  {
 	f, _ := os.Open("test.input")
 	bf := bufio.NewReader(f)
@@ -52,8 +54,29 @@ func TestFileClientQuickFind(t *testing.T) {
 	}
 }
 
+func moreGenericUnionFindTest (finder QuickUnion, unioner unionFunc) (bool, string){
+	unioner(4, 3)
+	unioner(3, 8)
+	unioner(6, 5)
+	unioner(9, 4)
+	unioner(2, 1)
+	if finder.connected(0, 7) {
+		return false, "0 and 7 should not be connected"
+	}
+	if !finder.connected(8, 9) {
+		return false, "8 and 9 should be connected"
+	}
+	unioner(0, 5)
+	unioner(7, 2)
+	unioner(6, 1)
+	unioner(1, 0)
+	if !finder.connected(0, 7) {
+		return false, "0 and 7 should be connected"
+	}
+	return true, ""
+}
+
 func genericUnionFindTest (finder UnionFinder) (bool, string){
-	finder.initUF(10)
 	finder.union(4, 3)
 	finder.union(3, 8)
 	finder.union(6, 5)
@@ -79,6 +102,7 @@ func TestQuickUnion(t *testing.T) {
 	var finder UnionFinder
 	var quickUnion QuickUnion
 	finder = &quickUnion
+	finder.initUF(10)
 	res, msg := genericUnionFindTest(finder)
 	if !res {
 		t.Error(msg)
@@ -89,6 +113,7 @@ func TestQuickFind(t *testing.T) {
 	var finder UnionFinder
 	var quickFinder QuickFind
 	finder = &quickFinder
+	finder.initUF(10)
 	res, msg := genericUnionFindTest(finder)
 	if !res {
 		t.Error(msg)
@@ -96,11 +121,18 @@ func TestQuickFind(t *testing.T) {
 }
 
 func BenchmarkQuickUnion(b *testing.B) {
-	var finder UnionFinder
 	var quickUnion QuickUnion
-	finder = &quickUnion
 	for i := 0; i < b.N; i++ {
-		genericUnionFindTest(finder)
+		quickUnion.initUF(10)
+		moreGenericUnionFindTest(quickUnion, quickUnion.union)
+	}
+}
+
+func BenchmarkQuickUnionWeighted(b *testing.B) {
+	var quickUnion QuickUnion
+	for i := 0; i < b.N; i++ {
+		quickUnion.initUF(10)
+		moreGenericUnionFindTest(quickUnion, quickUnion.weightedUnion)
 	}
 }
 
@@ -109,7 +141,7 @@ func BenchmarkQuickFind(b *testing.B) {
 	var quickFinder QuickFind
 	finder = &quickFinder
 	for i := 0; i < b.N; i++ {
+		finder.initUF(10)
 		genericUnionFindTest(finder)
 	}
 }
-
