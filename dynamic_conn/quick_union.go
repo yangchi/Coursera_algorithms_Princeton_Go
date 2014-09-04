@@ -13,6 +13,14 @@ func (ufp *QuickUnion) initUF (size int) {
 	}
 }
 
+func (ufp *QuickUnion) pathCompressionRoot (index int) (root int) {
+	root = ufp.objs[index]
+	for root != ufp.objs[root] {
+		ufp.objs[root] = ufp.objs[ufp.objs[root]]
+		root = ufp.objs[root]
+	}
+}
+
 func (ufp *QuickUnion) root (index int) (root int) {
 	root = ufp.objs[index]
 	for root != ufp.objs[root] {
