@@ -72,6 +72,21 @@ func TestStackLL (t *testing.T) {
 	}
 }
 
+func TestStackS (t *testing.T) {
+	var stack Stack
+	var stackS StackS
+	stackS.init()
+	stack = &stackS
+	res, msg := genericSimpleTest(stack)
+	if !res {
+		t.Error(msg)
+	}
+	res, msg = genericRandomTest(stack)
+	if !res {
+		t.Error(msg)
+	}
+}
+
 func TestStackL (t *testing.T) {
 	var stack Stack
 	var stackL StackL
