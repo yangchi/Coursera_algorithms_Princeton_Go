@@ -14,12 +14,8 @@ func (stack *StackL) init() {
 	stack.values = list.New()
 }
 
-func (stack *StackL) size () (uint) {
-	return uint(stack.values.Len())
-}
-
 func (stack *StackL) isEmpty() (bool) {
-	return stack.size() == 0
+	return stack.values.Len() == 0
 }
 
 func (stack *StackL) push(str string) {

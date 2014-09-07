@@ -4,5 +4,4 @@ type Stack interface {
 	push(str string)
 	pop() (string)
 	isEmpty() (bool)
-	size() (uint)
 }
