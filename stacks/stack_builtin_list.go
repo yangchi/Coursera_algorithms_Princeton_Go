@@ -14,8 +14,8 @@ func (stack *StackL) init() {
 	stack.values = list.New()
 }
 
-func (stack *StackL) size () (int) {
-	return stack.values.Len()
+func (stack *StackL) size () (uint) {
+	return uint(stack.values.Len())
 }
 
 func (stack *StackL) isEmpty() (bool) {
