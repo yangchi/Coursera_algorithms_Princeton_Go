@@ -27,7 +27,7 @@ func swapIntSlice (data []int, first, second int) {
 	data[second] = temp
 }
 
-func InsertionSort (data Sortable) {
+func SelectionSort (data Sortable) {
 	if data.Len() < 2 {
 		return
 	}

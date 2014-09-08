@@ -38,13 +38,25 @@ func genericVerify (data Sortable) (bool) {
 	return true
 }
 
+func TestInsertionSort (t *testing.T) {
+	var sort Sortable
+	data := []int{5,3,2,6,7,8,2,6,7}
+	intSlice := IntSlice{data}
+	sort = &intSlice
+	InsertionSort(sort)
+	result := genericVerify(sort)
+	if !result {
+		t.Error("Insertion sort failed")
+	}
+}
+
 func TestGenericSelectionSort (t *testing.T) {
 	var sort Sortable
 	intSlice := IntSlice{[]int{5,3,2,6,7,8,2,6,7}}
 	sort = &intSlice
-	InsertionSort(sort)
-	result := genericVerify (sort)
+	SelectionSort(sort)
+	result := genericVerify(sort)
 	if !result {
-		t.Error("Failed")
+		t.Error("Selection sort failed")
 	}
 }
