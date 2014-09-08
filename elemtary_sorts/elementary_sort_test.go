@@ -24,3 +24,27 @@ func verifySortedIntSlice (data []int) (bool) {
 	}
 	return true
 }
+
+func genericVerify (data Sortable) (bool) {
+	var index uint
+	for index = 0; index < data.Len(); index++ {
+		if index == 0 {
+			continue
+		}
+		if data.Less(index, index - 1) {
+			return false
+		}
+	}
+	return true
+}
+
+func TestGenericSelectionSort (t *testing.T) {
+	var sort Sortable
+	intSlice := IntSlice{[]int{5,3,2,6,7,8,2,6,7}}
+	sort = &intSlice
+	InsertionSort(sort)
+	result := genericVerify (sort)
+	if !result {
+		t.Error("Failed")
+	}
+}
