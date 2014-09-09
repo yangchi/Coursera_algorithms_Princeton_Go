@@ -16,13 +16,23 @@ func TestSelectionSortIntSlice (t *testing.T) {
 
 func TestMergeIntSlice (t *testing.T) {
 	myslice := []int{1,5,7,13,2,4,11,12,19,27}
-	mergeIntSlice(myslice, 0, 3, uint(len(myslice)-1))
+	temp := make([]int, len(myslice))
+	mergeIntSlice(myslice, temp, 0, 3, uint(len(myslice)-1))
 	result := verifySortedIntSlice(myslice)
 	if !result {
 		for _, elem := range myslice {
 			fmt.Println(elem)
 		}
 		t.Error("Merge failed")
+	}
+}
+
+func TestMergeSortIntSlice (t *testing.T) {
+	myslice := []int{1,5,7,13,2,4,11,12,19,27}
+	mergeSortIntSlice(myslice)
+	result := verifySortedIntSlice(myslice)
+	if !result {
+		t.Error("Merge sort failed")
 	}
 }
 

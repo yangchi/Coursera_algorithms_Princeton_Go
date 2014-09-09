@@ -4,8 +4,8 @@ package sorts
 	Merge data[lo...mid] and data[mid+x...high] each of which
 	are sorted
 */
-func mergeIntSlice (data []int, lo, mid, high uint) {
-	temp := make([]int, len(data))
+func mergeIntSlice (data, temp []int, lo, mid, high uint) {
+	//temp := make([]int, len(data))
 	second_half_index := mid + 1
 	index := 0
 	for index < len(temp) {
@@ -36,4 +36,19 @@ func mergeIntSlice (data []int, lo, mid, high uint) {
 		copy(temp_slice, temp_data_slice)
 	}
 	copy(data, temp)
+}
+
+func mergeSortHelperIntSlice (data, temp []int, lo, hi uint) {
+	if lo >= hi {
+		return
+	}
+	mid := lo + (hi - lo) / 2
+	mergeSortHelperIntSlice(data, temp, lo, mid)
+	mergeSortHelperIntSlice(data, temp, mid + 1, hi)
+	mergeIntSlice(data, temp, lo, mid, hi)
+}
+
+func mergeSortIntSlice (data []int) {
+	temp := make([]int, len(data))
+	mergeSortHelperIntSlice(data, temp, 0, uint(len(data) - 1))
 }
