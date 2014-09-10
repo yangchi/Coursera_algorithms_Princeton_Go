@@ -19,3 +19,5 @@ Shellsort
 Shuffling
 
 Convex Hull
+
+Bottom-up Merge sort (and some merge sort practical improvemented covered in merge sort section)
